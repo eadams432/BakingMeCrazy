@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BakingMeCrazy</string>
+
+    <!-- strings used to parse JSON data -->
+    <string name="json_recipe_id">id</string>
+    <string name="json_recipe_name">name</string>
+    <string name="json_ingredients_array_name">ingredients</string>
+    <string name ="json_steps_array_name">steps</string>
+    <string name="json_recipe_servings">servings</string>
+    <string name="json_recipe_image">image</string>
+    <string name="json_ingredients_quantity">quantity</string>
+    <string name="json_ingredients_measure">measure</string>
+    <string name="json_ingredients_name">ingredient</string>
+    <string name="json_step_id">id</string>
+    <string name="json_step_shortdescr">shortDescription</string>
+    <string name="json_step_descr">description</string>
+    <string name="json_step_video_url">videoURL</string>
+    <string name="json_step_image_url">thumbnailURL</string>
+</resources>
