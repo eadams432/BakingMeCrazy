@@ -5,7 +5,7 @@
     <string name="json_recipe_id">id</string>
     <string name="json_recipe_name">name</string>
     <string name="json_ingredients_array_name">ingredients</string>
-    <string name ="json_steps_array_name">steps</string>
+    <string name="json_steps_array_name">steps</string>
     <string name="json_recipe_servings">servings</string>
     <string name="json_recipe_image">image</string>
     <string name="json_ingredients_quantity">quantity</string>
@@ -16,4 +16,20 @@
     <string name="json_step_descr">description</string>
     <string name="json_step_video_url">videoURL</string>
     <string name="json_step_image_url">thumbnailURL</string>
+
+    <string name="recipes_url">https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json</string>
+    <string name="title_activity_recipe_detail">RecipeDetail</string>
+
+    <string name="recipe_parcel_name">recipe</string>
+    <string name="title_activity_step_detail">StepDetail</string>
+
+    <string name="servings_label">Serves: </string>
+
+    <!-- exoplayer -->
+    <string name="user_agent_string">exoplayer_agent</string>
+
+    <!-- Step Detail Activity -->
+    <string name="recipe_step_extra">recipe_step</string>
+    <string name="button_prev_step">Prev Step</string>
+    <string name="button_next_step">Next Step</string>
 </resources>
