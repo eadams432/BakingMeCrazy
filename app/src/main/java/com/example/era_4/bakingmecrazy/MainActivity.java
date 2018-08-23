@@ -2,6 +2,7 @@ package com.example.era_4.bakingmecrazy;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,26 +49,37 @@ public class MainActivity extends AppCompatActivity {
         mRecipeAdapter = new RecipeAdapter();
         mRecyclerView.setAdapter(mRecipeAdapter);
 
-        //do savedInstanceState stuff!
-        String recipeJSON ="";
-        try {
-            Uri uri = Uri.parse(getString(R.string.recipes_url));
-            URL url = null;
+        if (savedInstanceState != null && savedInstanceState.size()>0){
+            //load saved stuff
+            mRecipes = savedInstanceState.getParcelableArrayList(getString(R.string.recipe_array_name));
+            mRecipeAdapter.updateRecipes(mRecipes);
+            //reset the recyclerview state
+            mRecyclerView.getLayoutManager()
+                    .onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_parcel_name)));
+        } else {
+            String recipeJSON = "";
             try {
-                url = new URL(uri.toString());
-                getRecipeJSON(url);
-            }catch (MalformedURLException e){
+                Uri uri = Uri.parse(getString(R.string.recipes_url));
+                URL url = null;
+                try {
+                    url = new URL(uri.toString());
+                    getRecipeJSON(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        }catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-
+        //outState.putParcelableArrayList(getString(R.string.recipe_array_name),mRecipes);
+        //save state of recyclerview
+        Parcelable recyclerViewState =  mRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(getString(R.string.recyclerview_parcel_name),recyclerViewState);
     }
 
     public void getRecipeJSON(URL url) throws IOException{

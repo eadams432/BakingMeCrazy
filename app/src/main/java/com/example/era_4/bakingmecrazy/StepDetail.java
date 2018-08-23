@@ -1,5 +1,6 @@
 package com.example.era_4.bakingmecrazy;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.era_4.bakingmecrazy.utils.Recipe;
 import com.example.era_4.bakingmecrazy.utils.Step;
+import com.example.era_4.bakingmecrazy.utils.StepDetailFragment;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -27,7 +29,7 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
-public class StepDetail extends AppCompatActivity {
+public class StepDetail extends AppCompatActivity implements StepDetailFragment.OnNextStepClickListener {
 
     private PlayerView mPlayerView;
     private ExoPlayer mPlayer;
@@ -46,18 +48,48 @@ public class StepDetail extends AppCompatActivity {
         //setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mPlayerView = (PlayerView)findViewById(R.id.exo_player_view);
+      /*  mPlayerView = (PlayerView)findViewById(R.id.exo_player_view);
         mStepDescription = (TextView) findViewById(R.id.tv_step_description);
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(getString(R.string.recipe_step_extra))){
-            stepNumber = intent.getIntExtra(getString(R.string.recipe_step_extra),1);
-        }
-        if (intent.hasExtra(getString(R.string.recipe_parcel_name))){
-            mRecipe = intent.getParcelableExtra(getString(R.string.recipe_parcel_name));
-            mStep = mRecipe.getSteps().get(stepNumber);
+        if (savedInstanceState != null && savedInstanceState.size() > 0 ){
+            mRecipe = savedInstanceState.getParcelable(getString(R.string.recipe_parcel_name));
+            mStep = savedInstanceState.getParcelable(getString(R.string.recipe_step_extra));
+            mPlaybackPosition = savedInstanceState.getLong(getString(R.string.position_bundle_name));
             setViews();
+            mPlayer.seekTo(mPlaybackPosition);
+        }*/
+        if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            if (intent.hasExtra(getString(R.string.recipe_step_extra))) {
+                stepNumber = intent.getIntExtra(getString(R.string.recipe_step_extra), 1);
+            }
+
+            if (intent.hasExtra(getString(R.string.recipe_parcel_name))) {
+                mRecipe = intent.getParcelableExtra(getString(R.string.recipe_parcel_name));
+                mStep = mRecipe.getSteps().get(stepNumber);
+
+                StepDetailFragment fragment = StepDetailFragment.newInstance(mStep, this);
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .add(R.id.step_container, fragment)
+                        .commit();
+            }
         }
+    }
+
+    @Override
+    public void onNextStepClick(int stepInt) {
+
+    }
+
+    /*
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mPlaybackPosition = mPlayer.getCurrentPosition();
+        outState.putLong(getString(R.string.position_bundle_name),mPlaybackPosition);
+        outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
+        outState.putParcelable(getString(R.string.recipe_step_extra),mStep);
     }
 
     private void setViews(){
@@ -115,5 +147,5 @@ public class StepDetail extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         releasePlayer();
-    }
+    }*/
 }

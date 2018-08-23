@@ -37,7 +37,11 @@ public class StepAdapter extends ArrayAdapter<Step> {
     static class ViewHolder {
         TextView shortDescrTextView;
         TextView stepIdTextView;
+    }
 
+    public void updateStepAdapter(ArrayList data){
+        this.mData = data;
+        notifyDataSetChanged();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {

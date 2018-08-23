@@ -23,7 +23,13 @@
     <string name="recipe_parcel_name">recipe</string>
     <string name="title_activity_step_detail">StepDetail</string>
 
+    <!-- main activity -->
+    <string name="recyclerview_parcel_name">recyclerview_parcel</string>
     <string name="servings_label">Serves: </string>
+    <string name="recipe_array_name">recipe_array</string>
+
+    <!-- recipe detail activity -->
+    <string name="recipe_step_position">step_position</string>
 
     <!-- exoplayer -->
     <string name="user_agent_string">exoplayer_agent</string>
@@ -32,4 +38,8 @@
     <string name="recipe_step_extra">recipe_step</string>
     <string name="button_prev_step">Prev Step</string>
     <string name="button_next_step">Next Step</string>
+    <string name="position_bundle_name">player_position</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<!--<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,4 +16,11 @@
         android:id="@+id/lv_recipe_steps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-</LinearLayout>
+</LinearLayout>-->
+
+<fragment android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/fragment_recipe_detail_item"
+android:name="com.example.era_4.bakingmecrazy.utils.RecipeDetailFragment"
+xmlns:android="http://schemas.android.com/apk/res/android"></fragment>
+
