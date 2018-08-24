@@ -38,6 +38,8 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
     private int stepNumber;
     private TextView mStepDescription;
     private long mPlaybackPosition;
+    private StepDetailFragment mFragment;
+    private android.support.v4.app.FragmentManager mFragmentManager;
 
 
     @Override
@@ -58,6 +60,9 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
             setViews();
             mPlayer.seekTo(mPlaybackPosition);
         }*/
+
+        mFragmentManager = getSupportFragmentManager();
+
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             if (intent.hasExtra(getString(R.string.recipe_step_extra))) {
@@ -67,11 +72,9 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
             if (intent.hasExtra(getString(R.string.recipe_parcel_name))) {
                 mRecipe = intent.getParcelableExtra(getString(R.string.recipe_parcel_name));
                 mStep = mRecipe.getSteps().get(stepNumber);
-
-                StepDetailFragment fragment = StepDetailFragment.newInstance(mStep, this);
-                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .add(R.id.step_container, fragment)
+                mFragment = StepDetailFragment.newInstance(mStep,mRecipe, this);
+                mFragmentManager.beginTransaction()
+                        .add(R.id.step_container, mFragment)
                         .commit();
             }
         }
@@ -79,7 +82,12 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
 
     @Override
     public void onNextStepClick(int stepInt) {
-
+        //replace the step with next or previous one
+        mStep = mRecipe.getSteps().get(stepInt);
+        mFragment = StepDetailFragment.newInstance(mStep,mRecipe, this);
+        mFragmentManager.beginTransaction()
+                .replace(R.id.step_container, mFragment)
+                .commit();
     }
 
     /*

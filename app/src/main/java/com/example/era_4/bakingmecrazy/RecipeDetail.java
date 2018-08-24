@@ -38,7 +38,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
         if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable(getString(R.string.recipe_parcel_name));
         } else {
-            Log.e("TAG!","savedInstanceState is null!");
+            Log.e(TAG,"savedInstanceState is null!");
             Intent intent = getIntent();
             if (intent.hasExtra(getString(R.string.recipe_parcel_name))) {
                 mRecipe = intent.getParcelableExtra(getString(R.string.recipe_parcel_name));
@@ -100,5 +100,12 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
         /*int listPosition = listView.getFirstVisiblePosition();
         outState.putInt(getString(R.string.recipe_step_position),listPosition);
         */
+        boolean isNull;
+        if (outState == null) {
+            isNull = true;
+        }else{
+            isNull = false;
+        }
+        Log.i(TAG,"RecipeDetail - onSaveInstanceState!  The bundle is null?" + isNull);
     }
 }

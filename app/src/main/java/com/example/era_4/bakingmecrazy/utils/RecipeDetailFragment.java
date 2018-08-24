@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,42 +67,48 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //main activity is done, we should have the params now
+        setViews();
+    }
+
+    @Override
     public void setArguments(@Nullable Bundle args) {
         super.setArguments(args);
-        setViews();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
         mListView = (ListView) mRootView.findViewById(R.id.lv_recipe_steps);
-
-
+        if (mRecipe != null){
+            setViews();
+        }
         return mRootView;
     }
 
     public void setViews(){
+        Log.i("RecipeDetailFragment","setViews is called!");
         //get parameters
-        if (isAdded()) {
-            Bundle args = getArguments();
-            mRecipe = args.getParcelable("recipe");
+        if (isAdded() && getArguments() != null) {
+                Bundle args = getArguments();
+                mRecipe = args.getParcelable(getString(R.string.recipe_parcel_name));
 
-            mStepAdapter = new StepAdapter(mRootView.getContext(), R.layout.recipe_detail_item, mRecipe.getSteps());
-            mListView.setAdapter(mStepAdapter);
+                mStepAdapter = new StepAdapter(getContext(), R.layout.recipe_detail_item, mRecipe.getSteps());
+                mListView.setAdapter(mStepAdapter);
 
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //get the step
-                    Step step = (Step) parent.getItemAtPosition(position);
-                    mListener.onStepClick(step.getStepId());
-                }
-            });
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //get the step
+                        Step step = (Step) parent.getItemAtPosition(position);
+                        mListener.onStepClick(step.getStepId());
+                    }
+                });
         }
-
     }
 
 /*    // TODO: Rename method, update argument and hook method into UI event
@@ -120,6 +127,7 @@ public class RecipeDetailFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        Log.i("RecipeDetailFragment","onAttach!  Is the thing attached?" + isAdded());
     }
 
     @Override
