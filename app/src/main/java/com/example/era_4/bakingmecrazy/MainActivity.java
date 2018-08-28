@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private RecipeAdapter mRecipeAdapter;
     private RecyclerView mRecyclerView;
     private ArrayList<Recipe> mRecipes;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_recipe_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+        if (findViewById(R.id.rv_tablet_layout) != null){
+            mTwoPane = true;
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
+            mRecyclerView.setLayoutManager(gridLayoutManager);
+        } else {
+            mTwoPane = false;
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+        }
+
         mRecyclerView.setHasFixedSize(true);
         mRecipeAdapter = new RecipeAdapter();
         mRecyclerView.setAdapter(mRecipeAdapter);

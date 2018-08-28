@@ -30,6 +30,7 @@
 
     <!-- recipe detail activity -->
     <string name="recipe_step_position">step_position</string>
+    <string name="ingredients_label">Ingredients: </string>
 
     <!-- exoplayer -->
     <string name="user_agent_string">exoplayer_agent</string>

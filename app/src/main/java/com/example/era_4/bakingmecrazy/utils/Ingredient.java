@@ -24,6 +24,10 @@ public class Ingredient implements Parcelable{
             return 0;
         }
 
+        public String getName(){
+            return this.name;
+        }
+
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeFloat(quantity);

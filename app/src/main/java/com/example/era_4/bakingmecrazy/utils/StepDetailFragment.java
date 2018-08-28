@@ -43,6 +43,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     private View mRootView;
     private Button nextButton;
     private Button prevButton;
+    private boolean isLandscape;
 
     private OnNextStepClickListener mListener;
 
@@ -115,11 +116,19 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
         mRootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         mPlayerView =  (PlayerView) mRootView.findViewById(R.id.exo_player_view);
+
+        if (null != mRootView.findViewById(R.id.step_detail_landscape)){
+            isLandscape = true;
+        } else {
+            isLandscape = false;
+        }
+
         mStepDescription = (TextView) mRootView.findViewById(R.id.tv_step_description);
 
         nextButton = (Button) mRootView.findViewById(R.id.next_button);
         prevButton = (Button) mRootView.findViewById(R.id.prev_button);
 
+        //only display buttons if there's another step to show
         if (mStep.getStepId() == mRecipe.getSteps().size()-1){
             nextButton.setVisibility(View.GONE);
         } else {
@@ -131,7 +140,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         } else {
             prevButton.setOnClickListener(this);
         }
-
         setViews();
 
         return mRootView;
@@ -149,9 +157,11 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         mPlayer = ExoPlayerFactory.newSimpleInstance(defaultRenderersFactory,defaultTrackSelector,defaultLoadControl);
         mPlayerView.setPlayer(mPlayer);
         //start player?
-
         mPlayer.setPlayWhenReady(false);
         mPlayer.prepare(mediaSource,true,false);
+        if (mPlaybackPosition > 0){
+            mPlayer.seekTo(mPlaybackPosition);
+        }
     }
 
     private void setViews(){
@@ -160,6 +170,10 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         if (mStep.getVideoUrl()==null || mStep.getVideoUrl().length()==0){
             mPlayerView.setVisibility(View.GONE);
         } else {
+            //if in landscape mode and there's a video, hide other views
+            mStepDescription.setVisibility(View.GONE);
+            nextButton.setVisibility(View.GONE);
+            prevButton.setVisibility(View.GONE);
             createPlayer();
         }
     }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.era_4.bakingmecrazy.R;
 import com.example.era_4.bakingmecrazy.StepDetail;
@@ -26,6 +27,7 @@ public class RecipeDetailFragment extends Fragment {
     private StepAdapter mStepAdapter;
     private Recipe mRecipe;
     private View mRootView;
+    private TextView mIngredientsView;
 
     private OnStepClickListener mListener;
 
@@ -83,6 +85,7 @@ public class RecipeDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
+        mIngredientsView = mRootView.findViewById(R.id.tv_recipe_ingredients);
         mListView = (ListView) mRootView.findViewById(R.id.lv_recipe_steps);
         if (mRecipe != null){
             setViews();
@@ -91,12 +94,20 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     public void setViews(){
-        Log.i("RecipeDetailFragment","setViews is called!");
         //get parameters
         if (isAdded() && getArguments() != null) {
                 Bundle args = getArguments();
                 mRecipe = args.getParcelable(getString(R.string.recipe_parcel_name));
 
+                String ingredients = getString(R.string.ingredients_label);
+                for (int i=0;i<mRecipe.getIngredients().size();i++){
+                    if (i==0){
+                        ingredients = ingredients + mRecipe.getIngredients().get(i).getName();
+                    } else {
+                        ingredients = ingredients + ", " + mRecipe.getIngredients().get(i).getName();
+                    }
+                }
+                mIngredientsView.setText(ingredients);
                 mStepAdapter = new StepAdapter(getContext(), R.layout.recipe_detail_item, mRecipe.getSteps());
                 mListView.setAdapter(mStepAdapter);
 

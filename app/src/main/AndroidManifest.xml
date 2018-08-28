@@ -21,8 +21,8 @@
         <activity
             android:name=".RecipeDetail"
             android:label="@string/title_activity_recipe_detail"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".MainActivity">
+            <!--android:theme="@style/AppTheme.NoActionBar">-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.era_4.bakingmecrazy.MainActivity" />
@@ -30,8 +30,9 @@
         <activity
             android:name=".StepDetail"
             android:label="@string/title_activity_step_detail"
-            android:parentActivityName=".RecipeDetail"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".RecipeDetail">
+            <!--android:theme="@style/AppTheme.NoActionBar"-->
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.era_4.bakingmecrazy.RecipeDetail" />

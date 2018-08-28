@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -77,7 +78,17 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
                         .add(R.id.step_container, mFragment)
                         .commit();
             }
+        } else {
+            mRecipe = savedInstanceState.getParcelable(getString(R.string.recipe_parcel_name));
+            //set toolbar title to recipe name
+            setTitle(mRecipe.getName());
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
     }
 
     @Override

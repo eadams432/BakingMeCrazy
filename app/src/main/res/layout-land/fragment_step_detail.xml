@@ -6,15 +6,17 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.era_4.bakingmecrazy.StepDetail"
-    tools:showIn="@layout/activity_step_detail">
+    tools:showIn="@layout/activity_step_detail"
+    android:id="@+id/step_detail_landscape">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/exo_player_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
     </com.google.android.exoplayer2.ui.PlayerView>
 
