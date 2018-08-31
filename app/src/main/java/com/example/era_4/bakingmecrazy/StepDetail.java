@@ -2,12 +2,15 @@ package com.example.era_4.bakingmecrazy;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -50,6 +53,7 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
       /*  mPlayerView = (PlayerView)findViewById(R.id.exo_player_view);
         mStepDescription = (TextView) findViewById(R.id.tv_step_description);
@@ -80,15 +84,24 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
             }
         } else {
             mRecipe = savedInstanceState.getParcelable(getString(R.string.recipe_parcel_name));
-            //set toolbar title to recipe name
-            setTitle(mRecipe.getName());
+            mStep = savedInstanceState.getParcelable(getString(R.string.recipe_step_extra));
+        }
+        if (mStep != null){
+            //set toolbar title to step short descr
+            setTitle(mStep.getStepShortDescr());
+        }
+
+        //if single pane and in landscape, hide the action bar
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            getSupportActionBar().hide();
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
+        outState.putParcelable(getString(R.string.recipe_step_extra),mStep);
     }
 
     @Override
@@ -99,6 +112,16 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
         mFragmentManager.beginTransaction()
                 .replace(R.id.step_container, mFragment)
                 .commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /*

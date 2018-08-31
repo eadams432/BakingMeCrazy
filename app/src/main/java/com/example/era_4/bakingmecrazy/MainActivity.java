@@ -1,6 +1,7 @@
 package com.example.era_4.bakingmecrazy;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.era_4.bakingmecrazy.utils.Ingredient;
 import com.example.era_4.bakingmecrazy.utils.Recipe;
@@ -47,9 +49,15 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_recipe_list);
 
 
-        if (findViewById(R.id.rv_tablet_layout) != null){
+        if (findViewById(R.id.tablet_layout) != null){
             mTwoPane = true;
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
+            int columns = 3;
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                columns = 3;
+            } else {
+                columns = 2;
+            }
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this,columns);
             mRecyclerView.setLayoutManager(gridLayoutManager);
         } else {
             mTwoPane = false;
@@ -57,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setLayoutManager(linearLayoutManager);
         }
 
-        mRecyclerView.setHasFixedSize(true);
+        //mRecyclerView.setHasFixedSize(true);
         mRecipeAdapter = new RecipeAdapter();
         mRecyclerView.setAdapter(mRecipeAdapter);
 
@@ -66,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
             mRecipes = savedInstanceState.getParcelableArrayList(getString(R.string.recipe_array_name));
             mRecipeAdapter.updateRecipes(mRecipes);
             //reset the recyclerview state
-            mRecyclerView.getLayoutManager()
-                    .onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_parcel_name)));
+           //mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_parcel_name)));
         } else {
             String recipeJSON = "";
             try {
@@ -86,12 +93,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        //outState.putParcelableArrayList(getString(R.string.recipe_array_name),mRecipes);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(getString(R.string.recipe_array_name),mRecipes);
         //save state of recyclerview
-        Parcelable recyclerViewState =  mRecyclerView.getLayoutManager().onSaveInstanceState();
-        outState.putParcelable(getString(R.string.recyclerview_parcel_name),recyclerViewState);
+        //Parcelable recyclerViewState =  mRecyclerView.getLayoutManager().onSaveInstanceState();
+        //outState.putParcelable(getString(R.string.recyclerview_parcel_name),recyclerViewState);
     }
 
     public void getRecipeJSON(URL url) throws IOException{

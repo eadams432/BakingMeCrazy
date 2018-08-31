@@ -59,7 +59,7 @@ public class StepAdapter extends ArrayAdapter<Step> {
             holder = (ViewHolder) convertView.getTag();
         }
         if (currentStep!= null) {
-            holder.shortDescrTextView.setText(currentStep.getStepDescr());
+            holder.shortDescrTextView.setText(currentStep.getStepShortDescr());
             Log.i(TAG,"Description=" + currentStep.getStepDescr() + ", id=" + String.valueOf(currentStep.getStepId()) );
             if (currentStep.getStepId()>0) {
                // holder.stepIdTextView.setText(String.valueOf(currentStep.getStepId()));

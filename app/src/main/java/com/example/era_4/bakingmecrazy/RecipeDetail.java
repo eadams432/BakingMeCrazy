@@ -2,14 +2,17 @@ package com.example.era_4.bakingmecrazy;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
 import com.example.era_4.bakingmecrazy.utils.Recipe;
 import com.example.era_4.bakingmecrazy.utils.RecipeDetailFragment;
 import com.example.era_4.bakingmecrazy.utils.StepDetailFragment;
 
 
-public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragment.OnStepClickListener{
+public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragment.OnStepClickListener, StepDetailFragment.OnNextStepClickListener{
 
     private Recipe mRecipe;
     private final String TAG = RecipeDetail.class.getSimpleName();
@@ -23,7 +26,8 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
         setContentView(R.layout.activity_recipe_detail);
        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         if (findViewById(R.id.two_pane_layout) != null){
             mTwoPane = true;
@@ -53,7 +57,10 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
             }
         }
         //set toolbar title to recipe name
-        setTitle(mRecipe.getName());
+        if (mRecipe != null) {
+            setTitle(mRecipe.getName());
+        }
+
     }
 
     @Override
@@ -77,5 +84,10 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
+    }
+
+    @Override
+    public void onNextStepClick(int stepInt) {
+
     }
 }

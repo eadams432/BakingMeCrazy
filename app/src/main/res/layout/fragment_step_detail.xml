@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.era_4.bakingmecrazy.StepDetail"
-    tools:showIn="@layout/activity_step_detail">
+    tools:context="com.example.era_4.bakingmecrazy.StepDetail">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/exo_player_view"
@@ -32,25 +31,27 @@
         android:id="@+id/prev_button"
         android:layout_width="100dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/button_prev_step"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_step_description" />
 
     <Button
         android:id="@+id/next_button"
         android:layout_width="100dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/button_next_step"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_step_description" />
 
 
 </android.support.constraint.ConstraintLayout>

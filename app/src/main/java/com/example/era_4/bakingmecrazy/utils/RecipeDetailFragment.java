@@ -138,7 +138,6 @@ public class RecipeDetailFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        Log.i("RecipeDetailFragment","onAttach!  Is the thing attached?" + isAdded());
     }
 
     @Override

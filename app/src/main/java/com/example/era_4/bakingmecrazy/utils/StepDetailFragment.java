@@ -1,6 +1,7 @@
 package com.example.era_4.bakingmecrazy.utils;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -117,29 +118,29 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         mRootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         mPlayerView =  (PlayerView) mRootView.findViewById(R.id.exo_player_view);
 
-        if (null != mRootView.findViewById(R.id.step_detail_landscape)){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             isLandscape = true;
         } else {
             isLandscape = false;
+            /* use buttons only in portrait mode */
+            nextButton = (Button) mRootView.findViewById(R.id.next_button);
+            prevButton = (Button) mRootView.findViewById(R.id.prev_button);
+            //only display buttons if there's another step to show
+            if (mStep.getStepId() == mRecipe.getSteps().size()-1){
+                nextButton.setVisibility(View.GONE);
+            } else {
+                nextButton.setOnClickListener(this);
+            }
+
+            if (mStep.getStepId() == 0){
+                prevButton.setVisibility(View.GONE);
+            } else {
+                prevButton.setOnClickListener(this);
+            }
         }
 
         mStepDescription = (TextView) mRootView.findViewById(R.id.tv_step_description);
 
-        nextButton = (Button) mRootView.findViewById(R.id.next_button);
-        prevButton = (Button) mRootView.findViewById(R.id.prev_button);
-
-        //only display buttons if there's another step to show
-        if (mStep.getStepId() == mRecipe.getSteps().size()-1){
-            nextButton.setVisibility(View.GONE);
-        } else {
-            nextButton.setOnClickListener(this);
-        }
-
-        if (mStep.getStepId() == 0){
-            prevButton.setVisibility(View.GONE);
-        } else {
-            prevButton.setOnClickListener(this);
-        }
         setViews();
 
         return mRootView;
@@ -165,15 +166,20 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     }
 
     private void setViews(){
-        mStepDescription.setText(mStep.getStepDescr());
-
+        if (mStepDescription != null) {
+            mStepDescription.setText(mStep.getStepDescr());
+        }
+        //if no video present, hide player view
         if (mStep.getVideoUrl()==null || mStep.getVideoUrl().length()==0){
             mPlayerView.setVisibility(View.GONE);
         } else {
             //if in landscape mode and there's a video, hide other views
-            mStepDescription.setVisibility(View.GONE);
-            nextButton.setVisibility(View.GONE);
-            prevButton.setVisibility(View.GONE);
+            if (mStepDescription != null && isLandscape) {
+                mStepDescription.setVisibility(View.GONE);
+            }
+           // nextButton.setVisibility(View.GONE);
+          //  prevButton.setVisibility(View.GONE);
+
             createPlayer();
         }
     }
@@ -208,7 +214,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             mListener = (OnNextStepClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnNextStepClickListener");
         }
     }
 
