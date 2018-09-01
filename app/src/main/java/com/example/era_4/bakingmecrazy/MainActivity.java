@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 URL url = null;
                 try {
                     url = new URL(uri.toString());
-                    getRecipeJSON(url);
+                    getRecipeJSON(url,this);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -101,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
         //outState.putParcelable(getString(R.string.recyclerview_parcel_name),recyclerViewState);
     }
 
-    public void getRecipeJSON(URL url) throws IOException{
+    public void getRecipeJSON(URL url, final Context context) throws IOException{
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 try {
-                                    mRecipes = createRecipesFromJson(responseString);
+                                    mRecipes = createRecipesFromJson(responseString, context);
                                     mRecipeAdapter.updateRecipes(mRecipes);
                                 }catch (JSONException e){
                                     e.printStackTrace();
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Recipe> createRecipesFromJson(String JsonString) throws JSONException {
+    public static ArrayList<Recipe> createRecipesFromJson(String JsonString, Context context) throws JSONException {
         ArrayList<Recipe> recipes = new ArrayList<>();
 
         JSONArray array = new JSONArray(JsonString);
@@ -144,30 +145,30 @@ public class MainActivity extends AppCompatActivity {
 
             JSONObject recipeJSON = array.getJSONObject(i);
             //general recipe info
-            int recipeId = recipeJSON.getInt(getString(R.string.json_recipe_id));
-            String recipeName = recipeJSON.getString(getString(R.string.json_recipe_name));
-            int recipeServings = Integer.parseInt(recipeJSON.getString(getString((R.string.json_recipe_servings))));
-            String recipeImage = recipeJSON.getString(getString(R.string.json_recipe_image));
+            int recipeId = recipeJSON.getInt(context.getString(R.string.json_recipe_id));
+            String recipeName = recipeJSON.getString(context.getString(R.string.json_recipe_name));
+            int recipeServings = Integer.parseInt(recipeJSON.getString(context.getString((R.string.json_recipe_servings))));
+            String recipeImage = recipeJSON.getString(context.getString(R.string.json_recipe_image));
             Recipe recipe = new Recipe(recipeName,recipeServings,recipeId, recipeImage);
 
             //ingredients
-            JSONArray ingredientsArray = recipeJSON.getJSONArray(getString(R.string.json_ingredients_array_name));
+            JSONArray ingredientsArray = recipeJSON.getJSONArray(context.getString(R.string.json_ingredients_array_name));
             for (int j=0; j < ingredientsArray.length();j++){
                 JSONObject ingredientJSON = ingredientsArray.getJSONObject(j);
-                int quantity = ingredientJSON.getInt(getString(R.string.json_ingredients_quantity));
-                String name = ingredientJSON.getString(getString(R.string.json_ingredients_name));
-                String measure = ingredientJSON.getString(getString(R.string.json_ingredients_measure));
+                int quantity = ingredientJSON.getInt(context.getString(R.string.json_ingredients_quantity));
+                String name = ingredientJSON.getString(context.getString(R.string.json_ingredients_name));
+                String measure = ingredientJSON.getString(context.getString(R.string.json_ingredients_measure));
                 recipe.addIngredient(name,quantity,measure);
             }
             //steps
-            JSONArray stepsArray = recipeJSON.getJSONArray(getString(R.string.json_steps_array_name));
+            JSONArray stepsArray = recipeJSON.getJSONArray(context.getString(R.string.json_steps_array_name));
             for (int k=0; k < stepsArray.length();k++){
                 JSONObject stepJSON = stepsArray.getJSONObject(k);
-                int id = stepJSON.getInt(getString(R.string.json_step_id));
-                String shortdescr = stepJSON.getString(getString(R.string.json_step_shortdescr));
-                String descr = stepJSON.getString(getString(R.string.json_step_descr));
-                String videoUrl = stepJSON.getString(getString(R.string.json_step_video_url));
-                String thumbnailUrl = stepJSON.getString(getString(R.string.json_step_image_url));
+                int id = stepJSON.getInt(context.getString(R.string.json_step_id));
+                String shortdescr = stepJSON.getString(context.getString(R.string.json_step_shortdescr));
+                String descr = stepJSON.getString(context.getString(R.string.json_step_descr));
+                String videoUrl = stepJSON.getString(context.getString(R.string.json_step_video_url));
+                String thumbnailUrl = stepJSON.getString(context.getString(R.string.json_step_image_url));
                 recipe.addStep(id,shortdescr,descr,videoUrl,thumbnailUrl);
             }
             recipes.add(recipe);

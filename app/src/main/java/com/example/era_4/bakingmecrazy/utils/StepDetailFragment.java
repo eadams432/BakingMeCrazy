@@ -45,6 +45,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     private Button nextButton;
     private Button prevButton;
     private boolean isLandscape;
+    private boolean isTwoPane;
 
     private OnNextStepClickListener mListener;
 
@@ -118,6 +119,12 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         mRootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         mPlayerView =  (PlayerView) mRootView.findViewById(R.id.exo_player_view);
 
+        if (mRootView.findViewById(R.id.two_pane_layout)==null){
+            isTwoPane = false;
+        } else {
+            isTwoPane = true;
+        }
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             isLandscape = true;
         } else {
@@ -173,13 +180,12 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         if (mStep.getVideoUrl()==null || mStep.getVideoUrl().length()==0){
             mPlayerView.setVisibility(View.GONE);
         } else {
-            //if in landscape mode and there's a video, hide other views
-            if (mStepDescription != null && isLandscape) {
+            //if in landscape mode, Single pane, and there's a video, hide other views
+            if (mStepDescription != null && isLandscape && !isTwoPane) {
                 mStepDescription.setVisibility(View.GONE);
             }
            // nextButton.setVisibility(View.GONE);
           //  prevButton.setVisibility(View.GONE);
-
             createPlayer();
         }
     }
