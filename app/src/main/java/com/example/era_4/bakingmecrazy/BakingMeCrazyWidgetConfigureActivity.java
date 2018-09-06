@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -48,6 +49,30 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
             //String widgetText = mAppWidgetText.getText().toString();
             //saveTitlePref(context, mAppWidgetId, widgetText);
 
+            //store recipe name and ingredients list in shared preferences
+            String selectedRecipeName = mRecipeSpinner.getSelectedItem().toString();
+            Recipe selectedRecipe = null;
+            for (int i=0;i<mRecipes.size();i++){
+                if (selectedRecipeName.equals(mRecipes.get(i).getName())){
+                    selectedRecipe = mRecipes.get(i);
+                    break;
+                }
+            }
+            String recipeNameKey = getString(R.string.recipe_name_key);
+            saveRecipePref(context,mAppWidgetId,recipeNameKey,selectedRecipe.getName());
+
+            String ingredients = "";
+            for (int i=0; i <selectedRecipe.getIngredients().size(); i++){
+                if (i==0){
+                    ingredients = selectedRecipe.getIngredients().get(i).getName();
+                } else {
+                    ingredients = ingredients + ", " + selectedRecipe.getIngredients().get(i).getName();
+                }
+            }
+            String recipeIngredientsKey = getString(R.string.recipe_ingredients_key);
+            saveRecipePref(context,mAppWidgetId,recipeIngredientsKey,ingredients);
+
+
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             BakingMeCrazyWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
@@ -65,17 +90,17 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
+    static void saveRecipePref(Context context, int appWidgetId,String key, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
+        prefs.putString(key + appWidgetId, text);
         prefs.apply();
     }
 
     // Read the prefix from the SharedPreferences object for this widget.
     // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId) {
+    static String loadRecipePref(Context context, int appWidgetId, String key) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
+        String titleValue = prefs.getString(key + appWidgetId, null);
         if (titleValue != null) {
             return titleValue;
         } else {
@@ -83,9 +108,9 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
         }
     }
 
-    static void deleteTitlePref(Context context, int appWidgetId) {
+    static void deleteRecipePref(Context context, int appWidgetId, String key) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId);
+        prefs.remove(key + appWidgetId);
         prefs.apply();
     }
 
@@ -107,22 +132,13 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
             try {
                 url = new URL(uri.toString());
                 getRecipeJSON(url,this);
+                setSpinner();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        mRecipeSpinner = (Spinner) findViewById(R.id.spinner_recipe_name);
-        ArrayList<String> recipeNameArrayList = new ArrayList<>();
-        for (int i=0;i<mRecipes.size();i++){
-            recipeNameArrayList.add(mRecipes.get(i).getName());
-        }
-        ArrayAdapter<String> recipeSpinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,recipeNameArrayList);
-        recipeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mRecipeSpinner.setAdapter(recipeSpinnerAdapter);
-
 
         // Find the widget id from the intent.
         Intent intent = getIntent();
@@ -139,6 +155,17 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
         }
 
        //mAppWidgetText.setText(loadTitlePref(BakingMeCrazyWidgetConfigureActivity.this, mAppWidgetId));
+    }
+
+    public void setSpinner(){
+        mRecipeSpinner = (Spinner) findViewById(R.id.spinner_recipe_name);
+        ArrayList<String> recipeNameArrayList = new ArrayList<>();
+        for (int i=0;i<mRecipes.size();i++){
+            recipeNameArrayList.add(mRecipes.get(i).getName());
+        }
+        ArrayAdapter<String> recipeSpinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,recipeNameArrayList);
+        recipeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mRecipeSpinner.setAdapter(recipeSpinnerAdapter);
     }
 
 
@@ -164,6 +191,9 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
                     public void run() {
                         try {
                             mRecipes = MainActivity.createRecipesFromJson(responseString, context);
+                            if (mRecipes == null){
+                                Log.e("Error","No recipes found!");
+                            }
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
