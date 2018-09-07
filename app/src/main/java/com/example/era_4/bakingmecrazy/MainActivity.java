@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static ArrayList<Recipe> createRecipesFromJson(String JsonString, Context context) throws JSONException {
+        Log.i("MainActivity","Getting those recipies!");
         ArrayList<Recipe> recipes = new ArrayList<>();
 
         JSONArray array = new JSONArray(JsonString);

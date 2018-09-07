@@ -124,6 +124,7 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
 
         setContentView(R.layout.baking_me_crazy_widget_configure);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
+        mRecipeSpinner = (Spinner) findViewById(R.id.spinner_recipe_name);
 
         //get recipes
         try {
@@ -132,7 +133,6 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
             try {
                 url = new URL(uri.toString());
                 getRecipeJSON(url,this);
-                setSpinner();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -158,7 +158,6 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
     }
 
     public void setSpinner(){
-        mRecipeSpinner = (Spinner) findViewById(R.id.spinner_recipe_name);
         ArrayList<String> recipeNameArrayList = new ArrayList<>();
         for (int i=0;i<mRecipes.size();i++){
             recipeNameArrayList.add(mRecipes.get(i).getName());
@@ -191,9 +190,7 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
                     public void run() {
                         try {
                             mRecipes = MainActivity.createRecipesFromJson(responseString, context);
-                            if (mRecipes == null){
-                                Log.e("Error","No recipes found!");
-                            }
+                            setSpinner();
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
