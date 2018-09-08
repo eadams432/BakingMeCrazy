@@ -1,8 +1,11 @@
 package com.example.era_4.bakingmecrazy;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -23,6 +26,15 @@ public class BakingMeCrazyWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_me_crazy_widget);
         views.setTextViewText(R.id.appwidget_text, widgetIngredients);
         views.setTextViewText(R.id.appwidget_recipe_name,widgetName);
+
+        // can't get this to work - the recipe name passed in the intent doesn't match the name displayed in the widget.
+        // it's using the default value, set to 'Oatmeal Cookies'
+        //Intent intent = new Intent(context, RecipeDetail.class);
+        //intent.putExtra(context.getString(R.string.widget_recipe_name), widgetName);
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

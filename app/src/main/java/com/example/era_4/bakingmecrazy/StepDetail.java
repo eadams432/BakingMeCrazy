@@ -50,21 +50,7 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-      /*  mPlayerView = (PlayerView)findViewById(R.id.exo_player_view);
-        mStepDescription = (TextView) findViewById(R.id.tv_step_description);
-
-        if (savedInstanceState != null && savedInstanceState.size() > 0 ){
-            mRecipe = savedInstanceState.getParcelable(getString(R.string.recipe_parcel_name));
-            mStep = savedInstanceState.getParcelable(getString(R.string.recipe_step_extra));
-            mPlaybackPosition = savedInstanceState.getLong(getString(R.string.position_bundle_name));
-            setViews();
-            mPlayer.seekTo(mPlaybackPosition);
-        }*/
 
         mFragmentManager = getSupportFragmentManager();
 
@@ -123,71 +109,4 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /*
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mPlaybackPosition = mPlayer.getCurrentPosition();
-        outState.putLong(getString(R.string.position_bundle_name),mPlaybackPosition);
-        outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
-        outState.putParcelable(getString(R.string.recipe_step_extra),mStep);
-    }
-
-    private void setViews(){
-        mStepDescription.setText(mStep.getStepDescr());
-
-        if (mStep.getVideoUrl()==null || mStep.getVideoUrl().length()==0){
-            mPlayerView.setVisibility(View.GONE);
-        } else {
-            createPlayer();
-        }
-    }
-
-    private void createPlayer(){
-        Uri videoUri = Uri.parse(mStep.getVideoUrl());
-        MediaSource mediaSource = new ExtractorMediaSource.Factory(
-                new DefaultHttpDataSourceFactory(getString(R.string.user_agent_string)))
-                .createMediaSource(videoUri);
-
-        DefaultRenderersFactory defaultRenderersFactory = new DefaultRenderersFactory(this);
-        DefaultTrackSelector defaultTrackSelector = new DefaultTrackSelector();
-        DefaultLoadControl defaultLoadControl = new DefaultLoadControl();
-        mPlayer = ExoPlayerFactory.newSimpleInstance(defaultRenderersFactory,defaultTrackSelector,defaultLoadControl);
-        mPlayerView.setPlayer(mPlayer);
-        //start player?
-
-        mPlayer.setPlayWhenReady(false);
-        mPlayer.prepare(mediaSource,true,false);
-
-    }
-
-    private void releasePlayer() {
-        if (mPlayer != null) {
-            mPlaybackPosition = mPlayer.getCurrentPosition();
-            //currentWindow = mPlayer.getCurrentWindowIndex();
-            //playWhenReady = mPlayer.getPlayWhenReady();
-            mPlayer.stop();
-            mPlayer.release();
-            mPlayer = null;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        mPlayer.seekTo(mPlaybackPosition);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        releasePlayer();
-    }*/
 }

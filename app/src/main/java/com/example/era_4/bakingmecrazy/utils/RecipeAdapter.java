@@ -44,14 +44,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         holder.mRecipe = mRecipes.get(position);
         holder.recipeName.setText(holder.mRecipe.getName());
-        /*String servingString = holder.recipeServings.getContext().getResources().getString(R.string.servings_label)
-                + String.valueOf(holder.mRecipe.getServings());*/
-       /* holder.recipeServings.setText(servingString);
-        if (holder.mRecipe.getImage() != null && holder.mRecipe.getImage().length()>0){
-            //load image with Picasso!
-        } else {
-            holder.recipeImage.setVisibility(View.GONE);
-        }*/
     }
 
 
@@ -68,18 +60,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView recipeName;
-        private TextView recipeServings;
-        private TextView recipeDescr;
-        private ImageView recipeImage;
         private Recipe mRecipe;
 
         public RecipeViewHolder(View itemView){
             super(itemView);
             recipeName = (TextView) itemView.findViewById(R.id.tv_recipe_name);
-            //recipeServings = (TextView) itemView.findViewById(R.id.tv_number_of_servings);
-           // recipeImage = (ImageView) itemView.findViewById(R.id.iv_recipe_image);
-
-            //is this right?
             itemView.setOnClickListener(this);
         }
 

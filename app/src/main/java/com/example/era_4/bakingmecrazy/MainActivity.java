@@ -5,6 +5,8 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +17,7 @@ import android.util.Log;
 import com.example.era_4.bakingmecrazy.utils.Ingredient;
 import com.example.era_4.bakingmecrazy.utils.Recipe;
 import com.example.era_4.bakingmecrazy.utils.RecipeAdapter;
+import com.example.era_4.bakingmecrazy.utils.SimpleIdlingResource;
 import com.example.era_4.bakingmecrazy.utils.Step;
 
 import org.json.JSONArray;
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Recipe> mRecipes;
     private boolean mTwoPane;
 
+    @Nullable private SimpleIdlingResource mIdlingResource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_recipe_list);
 
+        mIdlingResource = new SimpleIdlingResource();
 
         if (findViewById(R.id.tablet_layout) != null){
             mTwoPane = true;
@@ -73,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
             //load saved stuff
             mRecipes = savedInstanceState.getParcelableArrayList(getString(R.string.recipe_array_name));
             mRecipeAdapter.updateRecipes(mRecipes);
-            //reset the recyclerview state
-           //mRecyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_parcel_name)));
         } else {
             String recipeJSON = "";
             try {
@@ -96,12 +100,14 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(getString(R.string.recipe_array_name),mRecipes);
-        //save state of recyclerview
-        //Parcelable recyclerViewState =  mRecyclerView.getLayoutManager().onSaveInstanceState();
-        //outState.putParcelable(getString(R.string.recyclerview_parcel_name),recyclerViewState);
+
     }
 
     public void getRecipeJSON(URL url, final Context context) throws IOException{
+
+        if (!(mIdlingResource==null)){
+            mIdlingResource.setIdleState(false);
+        }
 
         OkHttpClient client = new OkHttpClient();
 
@@ -124,6 +130,9 @@ public class MainActivity extends AppCompatActivity {
                                 try {
                                     mRecipes = createRecipesFromJson(responseString, context);
                                     mRecipeAdapter.updateRecipes(mRecipes);
+                                    if (!(mIdlingResource==null)){
+                                        mIdlingResource.setIdleState(true);
+                                    }
                                 }catch (JSONException e){
                                     e.printStackTrace();
                                 }
@@ -133,9 +142,12 @@ public class MainActivity extends AppCompatActivity {
             });
     }
 
+    public IdlingResource getIdlingResource(){
+        return mIdlingResource;
+    }
+
 
     public static ArrayList<Recipe> createRecipesFromJson(String JsonString, Context context) throws JSONException {
-        Log.i("MainActivity","Getting those recipies!");
         ArrayList<Recipe> recipes = new ArrayList<>();
 
         JSONArray array = new JSONArray(JsonString);

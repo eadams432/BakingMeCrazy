@@ -28,7 +28,6 @@ public class Recipe implements Parcelable {
         this.servings = servings;
         this.id  = id;
         this.image = image;
-
     }
 
     public String getName() {

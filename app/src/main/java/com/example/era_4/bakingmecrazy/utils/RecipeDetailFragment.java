@@ -39,13 +39,6 @@ public class RecipeDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /*public static RecipeDetailFragment newInstance(Recipe recipe) {
-        RecipeDetailFragment fragment = new RecipeDetailFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(RECIPE_PARAM_STRING, recipe);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
 
     public void addRecipe(Recipe recipe) {
         //RecipeDetailFragment fragment = new RecipeDetailFragment();
@@ -122,12 +115,6 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
-/*    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
 
     @Override
     public void onAttach(Context context) {

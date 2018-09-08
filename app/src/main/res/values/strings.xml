@@ -41,9 +41,9 @@
     <string name="button_next_step">Next Step</string>
     <string name="position_bundle_name">player_position</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- widget config text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">Oatmeal Cookies</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
 
@@ -51,4 +51,5 @@
     <!-- widget strings -->
      <string name="recipe_name_key">recipe_name</string>
     <string name="recipe_ingredients_key">recipe_ingredients</string>
+    <string name="widget_recipe_name">widget_recipe_name</string>
 </resources>

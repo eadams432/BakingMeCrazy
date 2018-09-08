@@ -45,10 +45,6 @@ public class BakingMeCrazyWidgetConfigureActivity extends Activity {
         public void onClick(View v) {
             final Context context = BakingMeCrazyWidgetConfigureActivity.this;
 
-            // When the button is clicked, store the string locally
-            //String widgetText = mAppWidgetText.getText().toString();
-            //saveTitlePref(context, mAppWidgetId, widgetText);
-
             //store recipe name and ingredients list in shared preferences
             String selectedRecipeName = mRecipeSpinner.getSelectedItem().toString();
             Recipe selectedRecipe = null;
