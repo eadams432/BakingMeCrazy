@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.example.era_4.bakingmecrazy.utils.Recipe;
 import com.example.era_4.bakingmecrazy.utils.RecipeDetailFragment;
+import com.example.era_4.bakingmecrazy.utils.Step;
 import com.example.era_4.bakingmecrazy.utils.StepDetailFragment;
 
 import org.json.JSONException;
@@ -36,6 +37,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
     private android.support.v4.app.FragmentManager mFragmentManager;
     private StepDetailFragment mFragment;
     private String mWidgetRecipeName;
+    private Step mStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,17 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
 
         if (savedInstanceState != null) {
             mRecipe = savedInstanceState.getParcelable(getString(R.string.recipe_parcel_name));
+            mStep = savedInstanceState.getParcelable(getString(R.string.recipe_step_extra));
+            //setTwoPaneMode(mStep);
+            mFragmentManager = getSupportFragmentManager();
         } else {
+            //loading for the first time
             Intent intent = getIntent();
             if (intent.hasExtra(getString(R.string.recipe_parcel_name))) {
                 //selected recipe is coming from MainActivity
                 mRecipe = intent.getParcelableExtra(getString(R.string.recipe_parcel_name));
-                setTwoPaneMode();
+                mStep = mRecipe.getSteps().get(0);
+                setTwoPaneMode(mStep);
                 setMasterFragment();
 
             } else if(intent.hasExtra(getString(R.string.widget_recipe_name))) {
@@ -79,11 +86,11 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
         fragment.setArguments(args);
     }
 
-    public void setTwoPaneMode(){
+    public void setTwoPaneMode(Step step){
         if (mTwoPane){
             //if dual pane, load the Step fragment with the first step
             mFragmentManager = getSupportFragmentManager();
-            mFragment = StepDetailFragment.newInstance(mRecipe.getSteps().get(0),mRecipe, this);
+            mFragment = StepDetailFragment.newInstance(step,mRecipe, this);
             mFragmentManager.beginTransaction()
                     .add(R.id.step_container, mFragment)
                     .commit();
@@ -100,6 +107,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
     @Override
     public void onStepClick(int stepId) {
         //in single pane, start new activity
+        mStep = mRecipe.getSteps().get(stepId);
         if (!(mTwoPane)) {
             Intent stepIntent = new Intent(this, StepDetail.class);
             stepIntent.putExtra(getString(R.string.recipe_step_extra), stepId);
@@ -107,7 +115,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
             startActivity(stepIntent);
         }else{
             //in dual pane, update the detail fragment
-            mFragment = StepDetailFragment.newInstance(mRecipe.getSteps().get(stepId),mRecipe, this);
+            mFragment = StepDetailFragment.newInstance(mStep,mRecipe, this);
             mFragmentManager.beginTransaction()
                     .replace(R.id.step_container, mFragment)
                     .commit();
@@ -118,6 +126,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
+        outState.putParcelable(getString(R.string.recipe_step_extra),mStep);
     }
 
     @Override
@@ -172,7 +181,8 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
                                 }
                             }
                             mRecipe = widgetRecipe;
-                            setTwoPaneMode();
+                            mStep = mRecipe.getSteps().get(0);
+                            setTwoPaneMode(mStep);
                             setMasterFragment();
                             setToolbarTitle();
 

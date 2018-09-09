@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.era_4.bakingmecrazy.StepDetail">
+    tools:context="com.example.era_4.bakingmecrazy.StepDetail"
+    android:id="@+id/two_pane_layout">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/exo_player_view"

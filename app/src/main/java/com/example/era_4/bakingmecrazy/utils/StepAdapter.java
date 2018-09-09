@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.era_4.bakingmecrazy.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +37,7 @@ public class StepAdapter extends ArrayAdapter<Step> {
     }
 
     static class ViewHolder {
+        ImageView stepImageView;
         TextView shortDescrTextView;
         TextView stepIdTextView;
     }
@@ -54,13 +57,23 @@ public class StepAdapter extends ArrayAdapter<Step> {
             holder = new ViewHolder();
             holder.shortDescrTextView = (TextView) convertView.findViewById(R.id.tv_recipe_shortdescr);
             holder.stepIdTextView = (TextView) convertView.findViewById(R.id.tv_recipe_step_number);
+            holder.stepImageView = (ImageView) convertView.findViewById(R.id.iv_step_image);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         if (currentStep!= null) {
+
             holder.shortDescrTextView.setText(currentStep.getStepShortDescr());
-            Log.i(TAG,"Description=" + currentStep.getStepDescr() + ", id=" + String.valueOf(currentStep.getStepId()) );
+            //set step image, or hide view if not present
+            if (currentStep.getVideoUrl().length() > 0){
+                Picasso.get()
+                        .load(currentStep.getVideoUrl())
+                        .into(holder.stepImageView);
+            } else {
+                holder.stepImageView.setVisibility(View.GONE);
+            }
+
             if (currentStep.getStepId()>0) {
                // holder.stepIdTextView.setText(String.valueOf(currentStep.getStepId()));
             } else {

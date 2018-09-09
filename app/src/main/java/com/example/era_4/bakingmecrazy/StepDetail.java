@@ -10,6 +10,7 @@ import android.os.PersistableBundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -93,6 +94,7 @@ public class StepDetail extends AppCompatActivity implements StepDetailFragment.
     @Override
     public void onNextStepClick(int stepInt) {
         //replace the step with next or previous one
+        Log.i("TAG","In onNextStepClick!");
         mStep = mRecipe.getSteps().get(stepInt);
         mFragment = StepDetailFragment.newInstance(mStep,mRecipe, this);
         mFragmentManager.beginTransaction()

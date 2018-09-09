@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +26,6 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 
 public class StepDetailFragment extends Fragment implements View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private PlayerView mPlayerView;
     private ExoPlayer mPlayer;
@@ -41,11 +34,13 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     private int stepNumber;
     private TextView mStepDescription;
     private long mPlaybackPosition;
+    private int mPlaybackState;
     private View mRootView;
     private Button nextButton;
     private Button prevButton;
     private boolean isLandscape;
     private boolean isTwoPane;
+    private boolean playWhenReady;
 
     private OnNextStepClickListener mListener;
 
@@ -69,6 +64,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     public void onButtonPressed(int stepNumber) {
         if (mListener != null) {
             mListener.onNextStepClick(stepNumber);
+        } else {
+            Log.i("TAG","listener is null!");
         }
     }
 
@@ -76,7 +73,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      */
-    // TODO: Rename and change types and number of parameters
     public static StepDetailFragment newInstance(Step step, Recipe recipe, Context context) {
         StepDetailFragment fragment = new StepDetailFragment();
         Bundle args = new Bundle();
@@ -92,8 +88,13 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (mPlayer != null) {
+            mPlaybackPosition = mPlayer.getCurrentPosition();
+            mPlaybackState = mPlayer.getPlaybackState();
+        }
         outState.putLong(getString(R.string.position_bundle_name),mPlaybackPosition);
-        //outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
+        //outState.putInt(getString(R.string.exoplayer_state),mPlaybackState);
+        outState.putBoolean(getString(R.string.play_when_ready),playWhenReady);
         outState.putParcelable(getString(R.string.recipe_step_extra),mStep);
         outState.putParcelable(getString(R.string.recipe_parcel_name),mRecipe);
     }
@@ -115,6 +116,13 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         Bundle args = getArguments();
         mStep = args.getParcelable(getString(R.string.recipe_step_extra));
         mRecipe = args.getParcelable(getString(R.string.recipe_parcel_name));
+        playWhenReady = false;
+
+        if (savedInstanceState != null){
+            mPlaybackPosition = savedInstanceState.getLong(getString(R.string.position_bundle_name));
+            //mPlaybackState = savedInstanceState.getInt(getString(R.string.exoplayer_state));
+            playWhenReady = savedInstanceState.getBoolean(getString(R.string.play_when_ready));
+        }
 
         mRootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
         mPlayerView =  (PlayerView) mRootView.findViewById(R.id.exo_player_view);
@@ -133,13 +141,13 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             nextButton = (Button) mRootView.findViewById(R.id.next_button);
             prevButton = (Button) mRootView.findViewById(R.id.prev_button);
             //only display buttons if there's another step to show
-            if (mStep.getStepId() == mRecipe.getSteps().size()-1){
+            if (mStep.getStepId() == mRecipe.getSteps().size()-1 || isTwoPane){
                 nextButton.setVisibility(View.GONE);
             } else {
                 nextButton.setOnClickListener(this);
             }
 
-            if (mStep.getStepId() == 0){
+            if (mStep.getStepId() == 0 || isTwoPane){
                 prevButton.setVisibility(View.GONE);
             } else {
                 prevButton.setOnClickListener(this);
@@ -165,7 +173,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         mPlayer = ExoPlayerFactory.newSimpleInstance(defaultRenderersFactory,defaultTrackSelector,defaultLoadControl);
         mPlayerView.setPlayer(mPlayer);
         //start player?
-        mPlayer.setPlayWhenReady(false);
+
+        mPlayer.setPlayWhenReady(playWhenReady);
         mPlayer.prepare(mediaSource,true,false);
         if (mPlaybackPosition > 0){
             mPlayer.seekTo(mPlaybackPosition);
@@ -206,7 +215,9 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         if (mPlayer != null) {
             mPlaybackPosition = mPlayer.getCurrentPosition();
             //currentWindow = mPlayer.getCurrentWindowIndex();
-            //playWhenReady = mPlayer.getPlayWhenReady();
+            playWhenReady = mPlayer.getPlayWhenReady();
+            mPlaybackState = mPlayer.getPlaybackState();
+
             mPlayer.stop();
             mPlayer.release();
             mPlayer = null;

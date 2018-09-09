@@ -34,6 +34,8 @@
 
     <!-- exoplayer -->
     <string name="user_agent_string">exoplayer_agent</string>
+    <string name="exoplayer_state">exoplayer_state</string>
+    <string name="play_when_ready">play_when_ready</string>
 
     <!-- Step Detail Activity -->
     <string name="recipe_step_extra">recipe_step</string>

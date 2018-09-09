@@ -110,6 +110,7 @@ public class Recipe implements Parcelable {
         dest.writeInt(servings);
         dest.writeList(ingredients);
         dest.writeList(steps);
+        dest.writeString(image);
 
     }
 
@@ -130,5 +131,6 @@ public class Recipe implements Parcelable {
         this.servings = in.readInt();
         this.ingredients = in.readArrayList(Ingredient.class.getClassLoader());
         this.steps = in.readArrayList(Step.class.getClassLoader());
+        this.image = in.readString();
     }
 }

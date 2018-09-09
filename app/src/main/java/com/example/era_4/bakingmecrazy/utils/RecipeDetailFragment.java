@@ -101,7 +101,8 @@ public class RecipeDetailFragment extends Fragment {
                     }
                 }
                 mIngredientsView.setText(ingredients);
-                mStepAdapter = new StepAdapter(getContext(), R.layout.recipe_detail_item, mRecipe.getSteps());
+                //mStepAdapter = new StepAdapter(getContext(), R.layout.recipe_detail_item, mRecipe.getSteps());
+                mStepAdapter = new StepAdapter(getContext(), R.layout.recipe_detail_item_2, mRecipe.getSteps());
                 mListView.setAdapter(mStepAdapter);
 
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
